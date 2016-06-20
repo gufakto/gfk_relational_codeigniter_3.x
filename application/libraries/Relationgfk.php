@@ -5,27 +5,37 @@
 * Created Date 	: 19/06/2016
 * License 		: MIT
 * File name 	: Relationgfk.php
+* required      : modified ssp.php datatables library for codeigniter 3.x
+*
+* See http://datatables.net/usage/server-side for full details on the server-
+* side processing requirements of DataTables.
+*
+* @license MIT - http://datatables.net/license_mit
 *
 * @task we need to add a searching in this relation table
 * if you want to use this feature please make in your view like this
-* <input type="text" class="form-control" name="kode_coa" id="kode_coa" placeholder="Kode Coa" value="<?php echo $kode_coa; ?>" />
-* <a href="javascript:void(0);" onclick="set_model('<?php echo base_url(); ?>index.php/mak/get_data', 'Relation Role', 'input[name=kode_coa]')" class="btn btn-sm btn-danger">Browse</a>
+* <input type="text" class="form-control" name="kode_coa" id="kode_coa" placeholder="Kode Coa" value="$kode_coa" />
+* <a href="javascript:void(0);" onclick="set_model('url_to/index.php/mak/get_data', 'Relation Role', 'input[name=kode_coa]')" class="btn btn-sm btn-danger">Browse</a>
 *
 * to call this class and function from controller you can make like this
-*
-* echo  $this->relationgfk->get_relation(
-                        'siswa',
-                        'id',
-                        base_url() . 'index.php/mak/get_data',
-                        $page,
-                        [
-                            'id',
-                            'nama'
-                        ],
-                        $this->input->get('search') ? $this->input->get('search') : null,
-                        TRUE
-                    );
+* e.g :
+* echo  $this->relationgfk->get_relation('siswa','id', 'url_to/index.php/mak/get_data',$page,['id','nama'],$this->input->get('search') ? $this->input->get('search') : null,TRUE);
+* 
+* =============================================================================================================================
+* =============================================================================================================================
+* if you want to use datatables please call rel_datatables() function
+* if you do not want to use datatables please call get_relation() function
+* =============================================================================================================================
+
+ _____     __    __   ______   ________   __   ___  __________    ______
+/   __|   |  |  |  | |   ___\ /   __   \ |  | /  / |  _    _  |  /   _   \
+|  | ___  |  |  |  | |  |___  |  |__|  | |  |/  /  |_/ |  | \_| |   / \   |
+|  | \  | |  |  |  | |   __/  |   __   | |     |       |  |     |  |   |  |
+|  |_/  | |  \__/  | |  |     |  |  |  | |  |\  \      |  |     |   \_/   |
+ \_____/   \______/  |__|     |__|  |__| |__| \ _\     |__|      \_______/ 
+
 */
+
 class Relationgfk
 {
 
@@ -58,12 +68,12 @@ class Relationgfk
 	public function get_relation( $table, $pk, $link_pagination,$page,  $field_show=array(), $search=null, $action=FALSE )
 	{
 		$_html=array('thead'=> null, 'tbody' => null, 'pagination'=>null );
-		
+		$fields = $this->_ci->db->list_fields($table);
 		if( $search )
 		{
 			if( !count( $field_show ) )
 			{
-				$fields = $this->_ci->db->list_fields($table);
+				
 				$this->_ci->db->like($pk, $search);
 				foreach ($fields as $key_field) 
 				{
@@ -102,7 +112,7 @@ class Relationgfk
 		if( !count( $field_show ) )
 		{
 			$_html['thead'] = '<tr>';
-			$fields = $this->_ci->db->list_fields($table);
+			
 			foreach ($fields as $key_field) 
 			{
 				$_html['thead'] .= '<th>'.humanize($key_field).'</th>';
@@ -123,7 +133,6 @@ class Relationgfk
 		{
 			if( !count( $field_show ) )
 			{
-				$fields = $this->_ci->db->list_fields($table);
 				$this->_ci->db->select('*');
 				$this->_ci->db->like($pk, $search);
 				foreach ($fields as $key_field) 
@@ -170,7 +179,7 @@ class Relationgfk
 				$_html['tbody'] .= '<tr id="Col'. $value->{$pk} .'">';
 				if( !count( $field_show ) )
 				{
-					$fields = $this->_ci->db->list_fields($table);
+					
 					foreach ($fields as $key_field) 
 					{
 						$_html['tbody'] .= '<td>'.$value->{$key_field}.'</td>';
@@ -183,11 +192,73 @@ class Relationgfk
 						$_html['tbody'] .= '<td>'.$value->{$key_field}.'</td>';
 					}
 				}
-				$_html['tbody'] .= $action ? '<td><a href="javascript:void(0);" onclick="check_data_modal(this);" id="Col'.$value->{$pk}.'" class="btn btn-sm btn-info">Check</a></td></tr>' : '</tr>';
+				$_html['tbody'] .= $action ? '<td><a href="javascript:void(0);" onclick="check_data_modal(this, 0);" id="Col'.$value->{$pk}.'" class="btn btn-sm btn-info">Check</a></td></tr>' : '</tr>';
 			}
 		}
 		$_html['pagination'] = $this->_ci->pagination->create_links();
 
 		return json_encode( $_html );
+	}
+
+	/*
+	 * this function a litle-litle :D same as function in this top
+	 * the different is this function use for datatables bootstrap 3.x
+	 * and variable $field_show must filled. if not, the program will error
+	 */
+	public function rel_datatables( $table, $get, $pk, $field_show, $action=FALSE, $type=FALSE )
+	{
+		$this->_ci->load->library('ssp');
+		if( $type=="column" )
+		{
+			foreach ($field_show as $key_f) 
+		    {
+		    	$data['col'][] = ['data' => $key_f];
+		    }
+		    if( $action ){
+		    	$data['col'][] = ['data'	=> $pk.'_pk'];
+		    }
+		    $data['pk'] = $pk;
+
+		    return json_encode($data);
+		    die();
+		}
+
+		if( $type=='column_head' )
+		{
+			$data['thead'] = '<tr>';
+			foreach ($field_show as $key_f) 
+		    {
+		    	$data['thead'] .= '<th>'. humanize( $key_f ) .'</th>';
+		    }
+		    $data['thead']	.= '<th>Action</th></tr>';
+		    return json_encode( $data );
+		    die();
+		}
+
+		$connect = [
+		    'user' => $this->_ci->db->username,
+		    'pass' => $this->_ci->db->password,
+		    'db'   => $this->_ci->db->database,
+		    'host' => $this->_ci->db->hostname
+		];
+
+		foreach ($field_show as $key_f) 
+		{
+			$columns[] = [
+				'db'	=> $key_f,
+				'dt'	=> $key_f
+			]; 
+		}
+		if( $action ){
+			$columns[] = [
+				'db'		=> $pk,
+				'dt'		=> $pk.'_pk',
+				'formatter' => function( $d, $r ){
+					return '<a href="javascript:void(0);" onclick="check_data_modal(this, 0);" id="Col'.$d.'" class="btn btn-sm btn-info">Check</a>';
+				}
+			];
+		}
+		$data   = $this->_ci->ssp->simple( $get, $connect, $table, $pk, $columns );
+		return json_encode( $data );
 	}
 }
