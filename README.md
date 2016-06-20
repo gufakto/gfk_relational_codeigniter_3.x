@@ -3,39 +3,46 @@
  Author 		: sgufakto siagian
  Created Date 	: 19/06/2016
  
- File name 	: Relationgfk.php
+ # Relational Datatables GFK
+###The future of relational
+by [sgufakto](http://nyontekbae.id)
 
- @task we need to add a searching in this relation table
- if you want to use this feature please make in your view like this
- <input type="text" class="form-control" name="kode_coa" id="kode_coa" placeholder="Kode Coa" value="<?php echo $kode_coa; ?>" />
- <a href="javascript:void(0);" onclick="set_model('<?php echo base_url(); ?>index.php/mak/get_data', 'Relation Role', 'input[name=kode_coa]')" class="btn btn-sm btn-danger">Browse</a>
+This library use for help codeigniter programmer to implement relational table
+into application with datatable or normal table
 
- to call this class and function from controller you can make like this
-
- echo  $this->relationgfk->get_relation(
- 'siswa',
- 'id',
- base_url() . 'index.php/mak/get_data',
- $page,
- [
-     'id',
-     'nama'
- ],
- $this->input->get('search') ? $this->input->get('search') : null,
- TRUE
- );
+This version drops any backwards compatibility and makes things even more
+awesome then you could expect.
 
 
- Relation table with modal bootstrap in Codeigniter 3.x
- Author 		: sgufakto siagian
- Created Date 	: 19/06/2016
- 
- File name 	: relation.modal.js
- required  	: bootstra 3.x css and js , also you need to use jquery with min required jQuery-2.1.4 
+##Support
+If you use this to further your career, or put money in your pocket, and would like to support the project please consider a to call me
 
- @task we need to add a searching in this relation table
- to activated this javascript feature, you can cal in footer your html like this
- <script src="<?php echo base_url(); ?>assets/relation/relation.modal.js"></script>
- 
- and initialize your baseurl like this
- var baseurl = '<?php echo base_url(); ?>';
+
+##Documentation
+
+##Installation
+Just copy the files from this package to the corresponding folder in your
+application folder.  For example, copy application/libraries/Relationgfk.php to
+application/libraries/Relationgfk.php
+
+###CodeIgniter Version 3 Compatibility
+CodeIgniter v3.x requires the class file names to be Uppercase.  In order to support this follow the standard installation procedures and then either rename the following files or create symlinks
+
+	application/Relationgfk.php         =>   application/Relationgfk.php
+	application/ssp.php              	=>   application/ssp.php
+	assets/*              				=>   assets/*
+
+
+##Usage
+In the package you will find example usage code in the Relationgfk.php comments and 
+relation.modal.js comment.  The example code isn't the most beautiful code you'll ever see but
+it'll show you how to use the library and it's nice and generic.
+
+
+Feel free to send me an email if you have any problems.
+
+
+Thanks,
+-Donal Siagian
+ sgufakto@gmail.com
+ @sgufakto
