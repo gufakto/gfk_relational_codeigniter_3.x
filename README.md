@@ -45,3 +45,5 @@ Thanks,
 -Donal Siagian
  sgufakto@gmail.com
  @sgufakto
+ 
+if you want to donate please pm me via [email](http://nyontekbae.id)
