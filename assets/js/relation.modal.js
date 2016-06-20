@@ -2,7 +2,6 @@
 * Relation table with modal bootstrap in Codeigniter 3.x
 * Author 		: sgufakto siagian
 * Created Date 	: 19/06/2016
-* License 		: MIT
 * File name 	: relation.modal.js
 * required  	: bootstra 3.x css and js , datatables for bootstrap, 
 * 				  also you need to use jquery with min required jQuery-2.1.4 
