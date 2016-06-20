@@ -1,9 +1,8 @@
-# 
- Relation table with modal bootstrap in Codeigniter 3.x
- Author 		: sgufakto siagian
- Created Date 	: 19/06/2016
+Relation table with modal bootstrap in Codeigniter 3.x
+Author 		: sgufakto siagian
+Created Date 	: 19/06/2016
  
- # Relational Datatables GFK
+#Relational Datatables GFK
 ###The future of relational
 by [sgufakto](http://nyontekbae.id)
 
